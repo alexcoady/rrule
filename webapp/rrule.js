@@ -13,14 +13,9 @@ function RRule ( options ) {
     throw new Error("count must be a positive integer (not including 0)");
   }
 
-  if ( options.bysetpos && !_.isArray( options.bysetpos ) )
-    options.bysetpos = [].concat( options.bysetpos );
-
-  if ( options.bymonthday && !_.isArray( options.bymonthday ) )
-    options.bymonthday = [].concat( options.bymonthday );
-
-  if ( options.byweekday && !_.isArray( options.byweekday ) )
-    options.byweekday = [].concat( options.byweekday );
+  if ( options.bysetpos ) options.bysetpos = [].concat( options.bysetpos );
+  if ( options.bymonthday ) options.bymonthday = [].concat( options.bymonthday );
+  if ( options.byweekday ) options.byweekday = [].concat( options.byweekday );
 
   _.extend( this, RRule.DEFAULT_OPTIONS, options );
 }
@@ -77,6 +72,16 @@ RRule.FREQUENCIES = [
 ];
 
 
+RRule.prototype.all = function ( iterator, predicate ) {
+
+  var dates = [];
+
+
+
+  return dates;
+}
+
+
 RRule.prototype.toString = function () {
 
   var rules = [];
@@ -99,7 +104,7 @@ RRule.prototype.toString = function () {
   if ( this.until )
     rules.push( "UNTIL=" + this.until.toISOString() );
 
-   if ( this.bysetpos.length ) {
+  if ( this.bysetpos.length ) {
     rules.push( "BYSETPOS=" + this.bysetpos.join(",") );
   }
 
