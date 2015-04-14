@@ -22,8 +22,7 @@ app.use(function(err, req, res, next){
 app.use('/public', express.static(__dirname + '/../public/'));
 
 _.extend( app.locals, {
-    _:          _,
-    // C:  Constants
+    _: _
 });
 
 // Initialise routes and pass the 'app' to add requests
@@ -31,10 +30,17 @@ _.extend( app.locals, {
 
 app.get("/", function ( req, res ) {
 
-  var rrule = new RRule();
+  var rrule = new RRule({
+    freq: RRule.DAILY,
+    dtstart: new Date( 2015, RRule.FEB, 7 ),
+    interval: 2,
+    count: 10,
+    bysetpos: [ 1, 2, 3, 4, 5, -1 ],
+    byweekday: [ RRule.MO, RRule.TU ],
+    bymonthday: [ 1, 2, 3 ],
+  });
 
   res.render("list", {
-
     rrule: rrule
   });
 });
