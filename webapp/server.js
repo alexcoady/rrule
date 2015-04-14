@@ -31,13 +31,13 @@ _.extend( app.locals, {
 app.get("/", function ( req, res ) {
 
   var rrule = new RRule({
-    freq: RRule.DAILY,
-    dtstart: new Date( 2015, RRule.FEB, 7 ),
-    interval: 2,
+    freq: RRule.WEEKLY,
+    dtstart: new Date( 2015, RRule.FEB, 27 ),
+    interval: 1,
     count: 10,
-    bysetpos: [ 1, 2, 3, 4, 5, -1 ],
-    byweekday: [ RRule.MO, RRule.TU ],
-    bymonthday: [ 1, 2, 3 ],
+    // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
+    byweekday: [ RRule.MO, RRule.TH ],
+    // bymonthday: [ 1, 2, 3 ],
   });
 
   res.render("list", {

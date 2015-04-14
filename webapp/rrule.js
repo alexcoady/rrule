@@ -77,11 +77,11 @@ RRule.DEFAULT_LIST_OPTIONS = {
   before: undefined,
   include: true,
   iterator: function ( date, i ) {
-    console.log("Iterator at %s: %s", i, date);
+    // console.log("Iterator at %s: %s", i, date);
     return i < 100;
   },
   predicate: function ( date, i ) {
-    console.log("Predicate at %s: %s", i, date);
+    // console.log("Predicate at %s: %s", i, date);
     return true;
   }
 };
@@ -90,7 +90,17 @@ RRule.DEFAULT_LIST_OPTIONS = {
 
 
 
+RRule.prototype.add = function ( options ) {
 
+  var predicate = options.predicate;
+  var iterator = options.iterator;
+
+  return function ( date, dates ) {
+
+    if ( !iterator( date, dates.length ) ) return false;
+    if ( predicate( date, dates.length ) ) return dates.push( new Date(date.getTime()) );
+  };
+};
 
 
 
@@ -98,18 +108,78 @@ RRule.prototype.list = function ( options ) {
 
   var options = options || {};
 
-  _.extend( RRule.DEFAULT_LIST_OPTIONS, options );
+  _.extend( options, RRule.DEFAULT_LIST_OPTIONS, options );
+
+  // console.log("list", options);
 
   var after = options.after;
   var before = options.before;
   var include = options.include;
 
   var dates = [];
-  var kill = 100;
+  var kill = 200;
 
+  var dtstart = new Date( this.dtstart.getTime() );
+
+  var maxDate = options.before ? new Date( options.before.getTime() ) : undefined;
+  var minDate = options.after ? new Date( options.after.getTime() ) : undefined;
+
+  if ( this.until ) {
+
+    maxDate = !maxDate || ( maxDate.getTime() > this.until.getTime() ) ? this.until : undefined;
+  }
+
+  var iter = new Date( dtstart.getTime() );
+  var pointer = undefined;
+
+  var potential = undefined;
+
+  var add = this.add( options );
+
+  masterloop:
   while ( true && 0 < kill-- ) {
 
+    // console.log("Iter: ", iter);
+    potential = undefined;
+    pointer = new Date( iter );
 
+    // Break loop if date is out of range
+    if ( maxDate && maxDate.getTime() < iter.getTime() ) {
+      console.log("Iterator bigger than max date");
+      break;
+    }
+    if ( dates.length >= this.count ) break;
+
+
+
+
+
+    if ( this.freq === RRule.WEEKLY ) {
+
+      // Loop through days of week and see if appropriate
+      weekloop:
+      for ( var i = 0; i < this.byweekday.length; i += 1 ) {
+
+        var difference = this.byweekday[i].toJSDateDay() - iter.getDay();
+        difference = difference < 0 ? difference + 7 : difference;
+        pointer.setDate( iter.getDate() + difference );
+
+        if ( !add( pointer, dates ) ) break masterloop;
+      }
+    }
+
+    // if ( !add( potential, dates ) ) break;
+
+    // Update iterator
+    if ( this.freq === RRule.YEARLY ) {
+      iter.setYear( iter.getYear() + this.interval );
+    } else if ( this.freq === RRule.MONTHLY ) {
+      iter.setMonth( iter.getMonth() + this.interval );
+    } else if ( this.freq === RRule.WEEKLY ) {
+      iter.setDate( iter.getDate() + ( this.interval * 7 ) );
+    } else if ( this.freq === RRule.DAILY ) {
+      iter.setDate( iter.getDate() + this.interval );
+    }
   }
 
   return dates;
