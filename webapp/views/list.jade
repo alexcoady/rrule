@@ -2,7 +2,8 @@ extends layout
 block body
   h1 RRule
 
-  h4= rrule.toString()
-
   pre= JSON.stringify(rrule)
 
+  list = rrule.list()
+  each date in list
+    pre=date

@@ -72,11 +72,45 @@ RRule.FREQUENCIES = [
 ];
 
 
-RRule.prototype.all = function ( iterator, predicate ) {
+RRule.DEFAULT_LIST_OPTIONS = {
+  after: undefined,
+  before: undefined,
+  include: true,
+  iterator: function ( date, i ) {
+    console.log("Iterator at %s: %s", i, date);
+    return i < 100;
+  },
+  predicate: function ( date, i ) {
+    console.log("Predicate at %s: %s", i, date);
+    return true;
+  }
+};
+
+
+
+
+
+
+
+
+
+RRule.prototype.list = function ( options ) {
+
+  var options = options || {};
+
+  _.extend( RRule.DEFAULT_LIST_OPTIONS, options );
+
+  var after = options.after;
+  var before = options.before;
+  var include = options.include;
 
   var dates = [];
+  var kill = 100;
+
+  while ( true && 0 < kill-- ) {
 
 
+  }
 
   return dates;
 }
