@@ -32,8 +32,8 @@ app.get("/", function ( req, res ) {
 
   var rrule = new RRule({
     freq: RRule.WEEKLY,
-    dtstart: new Date( 2015, RRule.FEB, 27 ),
-    interval: 1,
+    dtstart: new Date( 2015, RRule.FEB, 3 ),
+    interval: 10,
     count: 10,
     // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
     byweekday: [ RRule.MO, RRule.TH ],
