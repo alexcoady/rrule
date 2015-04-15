@@ -92,6 +92,8 @@ RRule.DEFAULT_LIST_OPTIONS = {
 
 RRule.prototype.add = function ( options ) {
 
+  console.log(options);
+
   var predicate = options.predicate;
   var iterator = options.iterator;
 
@@ -122,11 +124,11 @@ RRule.prototype.list = function ( options ) {
   var dtstart = new Date( this.dtstart.getTime() );
 
   var maxDate = options.before ? new Date( options.before.getTime() ) : undefined;
-  var minDate = options.after ? new Date( options.after.getTime() ) : undefined;
+  var minDate = options.minDate = options.after ? new Date( options.after.getTime() ) : undefined;
 
   if ( this.until ) {
 
-    maxDate = !maxDate || ( maxDate.getTime() > this.until.getTime() ) ? this.until : undefined;
+    maxDate = options.maxDate = !maxDate || ( maxDate.getTime() > this.until.getTime() ) ? this.until : undefined;
   }
 
   var iter = new Date( dtstart.getTime() );
@@ -136,6 +138,8 @@ RRule.prototype.list = function ( options ) {
 
 
   masterloop: while ( true && 0 < kill-- ) {
+
+    console.log("Iter date: ", iter);
 
     // Reset internal pointer
     pointer = new Date( iter );
@@ -167,7 +171,8 @@ RRule.prototype.list = function ( options ) {
       weekloop: for ( var i = 0; i < this.byweekday.length; i += 1 ) {
 
         var difference = this.byweekday[i].toJSDateDay() - iter.getDay();
-        difference = difference < 0 ? difference + 7 : difference;
+        difference = difference <= 0 ? difference + 7 : difference;
+        console.log("Adding ", difference);
         pointer.setDate( iter.getDate() + difference );
 
         if ( !add( pointer, dates ) ) break masterloop;
@@ -194,7 +199,9 @@ RRule.prototype.list = function ( options ) {
 
   console.log("Loop iterated %s time(s)", 200 - kill);
 
-  return dates;
+  return dates.sort(function (a, b) {
+    return a.getTime() - b.getTime();
+  });
 }
 
 
