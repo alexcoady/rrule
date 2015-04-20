@@ -17,6 +17,7 @@ function IteratorMonthly () {}
    // Go to last date of the previous month
    pointer.setDate( 0 );
 
+
    for ( i; i < monthdaysCount; i += 1 ) {
 
      // Reset to pointer
@@ -25,6 +26,9 @@ function IteratorMonthly () {}
      // Set correct date
      monthPointer.setDate( rrule.bymonthday[i] );
 
+     if ( monthPointer.getMonth() !== pointer.getMonth() ) continue;
+
+     // Add
      if ( !options.add( monthPointer ) ) return false;
    }
 
