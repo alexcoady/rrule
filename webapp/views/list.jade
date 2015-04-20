@@ -4,13 +4,16 @@ block body
 
   pre= rrule
   
+  //- list = rrule.list({ before: new Date(2015, 03, 10) })
+  //- list = rrule.list({ after: new Date(2015, 01, 20) })
   list = rrule.list()
   if list.length
     ul.list-group
       cache = false
       diff = 0
-      each date in list
+      each date, i in list
         li.list-group-item= DateFormat(date, "fullDate")
+          .badge= i+1
           if cache
             diff = cache.getDaysBetween(date)
             .badge #{diff} days later
