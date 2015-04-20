@@ -1,5 +1,6 @@
 var _ = require("underscore");
 var Weekday = require("./weekday");
+var IteratorMonthly = require("./iterator-monthly");
 var IteratorWeekly = require("./iterator-weekly");
 var IteratorDaily = require("./iterator-daily");
 
@@ -206,7 +207,7 @@ RRule.prototype.list = function ( options ) {
   var options = _.extend( RRule.DEFAULT_LIST_OPTIONS, options );
   var pointer;
   var dates = [];
-  var count = 0;
+  var count = -1;
 
   this.calcMinDate( options );
   this.calcMaxDate( options );
@@ -228,7 +229,7 @@ RRule.prototype.list = function ( options ) {
     // MONTHLY LOOP
     else if ( this.freq === RRule.MONTHLY ) {
 
-
+      if ( !IteratorMonthly.loop(this, options, new Date(pointer)) ) break masterloop;
     }
 
     // WEEKLY LOOP
