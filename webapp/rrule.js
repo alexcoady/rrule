@@ -13,6 +13,7 @@ function RRule ( options ) {
     throw new Error("count must be a positive integer (not including 0)");
   }
 
+  // Force single values into an array for these properties
   if ( options.bysetpos ) options.bysetpos = [].concat( options.bysetpos );
   if ( options.bymonthday ) options.bymonthday = [].concat( options.bymonthday );
   if ( options.byweekday ) options.byweekday = [].concat( options.byweekday );
@@ -48,6 +49,19 @@ RRule.SEP = 8;
 RRule.OCT = 9;
 RRule.NOV = 10;
 RRule.DEC = 11;
+
+
+RRule.OPTION_NAMES = [
+  "freq",
+  "dtstart",
+  "interval",
+  "wkst",
+  "count",
+  "until",
+  "bysetpos",
+  "bymonthday",
+  "byweekday"
+];
 
 
 RRule.DEFAULT_OPTIONS = {
@@ -155,7 +169,7 @@ RRule.prototype.list = function ( options ) {
 
     }
 
-    // WEEKLY LOOP
+    // MONTHLY LOOP
     else if ( this.freq === RRule.MONTHLY ) {
 
 
@@ -172,7 +186,6 @@ RRule.prototype.list = function ( options ) {
 
         var difference = this.byweekday[i].toJSDateDay() - iter.getDay();
         difference = difference <= 0 ? difference + 7 : difference;
-        console.log("Adding ", difference);
         pointer.setDate( iter.getDate() + difference );
 
         if ( !add( pointer, dates ) ) break masterloop;
@@ -197,7 +210,7 @@ RRule.prototype.list = function ( options ) {
     }
   }
 
-  console.log("Loop iterated %s time(s)", 200 - kill);
+  console.log("Loop iterated %s time(s) and generated %s dates", 200 - kill, dates.length);
 
   return dates.sort(function (a, b) {
     return a.getTime() - b.getTime();

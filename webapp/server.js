@@ -1,31 +1,36 @@
 // Dependencies
-var express         = require('express'),
-    bodyParser      = require('body-parser'),
-    _               = require('underscore'),
-    RRule           = require('./rrule'),
-    app             = express();
+var express = require("express");
+var bodyParser = require("body-parser");
+var _ = require("underscore");
+var DateUtils = require("date-utils");
+var DateFormat = require("dateformat");
+var RRule = require("./rrule");
+var app = express();
 
 
 // App settings
-app.set( 'view engine', 'jade' );
-app.set( 'views', 'webapp/views/' );
+app.set( "view engine", "jade" );
+app.set( "views", "webapp/views/" );
 app.use( bodyParser() );
 
 
 // This should always be the last middleware function (handles all errors)
 app.use(function(err, req, res, next){
     console.error(err.stack);
-    res.send(500, 'Something broke (check terminal)');
+    res.send(500, "Something broke (check terminal)");
 });
 
 /* MIDDLEWARE STOPS HERE */
-app.use('/public', express.static(__dirname + '/../public/'));
+app.use("/public", express.static(__dirname + "/../public/"));
 
 _.extend( app.locals, {
-    _: _
+    _: _,
+    RRule: RRule,
+    DateUtils: DateUtils,
+    DateFormat: DateFormat
 });
 
-// Initialise routes and pass the 'app' to add requests
+// Initialise routes and pass the "app" to add requests
 // routes(app);
 
 app.get("/", function ( req, res ) {
@@ -34,8 +39,8 @@ app.get("/", function ( req, res ) {
     freq: RRule.WEEKLY,
     dtstart: new Date( 2015, RRule.FEB, 3 ),
     interval: 1,
-    until: new Date( 2016, RRule.MAY, 26 ),
-    // count: 10,
+    // until: new Date( 2016, RRule.MAY, 26 ),
+    count: 15,
     // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
     byweekday: [ RRule.MO, RRule.TH ],
     // bymonthday: [ 1, 2, 3 ],

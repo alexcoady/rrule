@@ -2,8 +2,16 @@ extends layout
 block body
   h1 RRule
 
-  pre= JSON.stringify(rrule)
-
+  pre= rrule
+  
   list = rrule.list()
-  each date in list
-    pre=date
+  if list.length
+    ul.list-group
+      cache = false
+      diff = 0
+      each date in list
+        li.list-group-item= DateFormat(date, "fullDate")
+          if cache
+            diff = cache.getDaysBetween(date)
+            .badge #{diff} days later
+        - cache = date
