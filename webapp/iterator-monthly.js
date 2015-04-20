@@ -26,6 +26,8 @@ function IteratorMonthly () {}
      // Set correct date
      monthPointer.setDate( rrule.bymonthday[i] );
 
+     // Month may have jumped to next month
+     // e.g. if date is 31 in a month with 28 days
      if ( monthPointer.getMonth() !== pointer.getMonth() ) continue;
 
      // Add
