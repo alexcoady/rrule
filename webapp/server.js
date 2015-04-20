@@ -1,3 +1,4 @@
+
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -39,8 +40,8 @@ app.get("/", function ( req, res ) {
     freq: RRule.DAILY,
     dtstart: new Date( 2015, RRule.FEB, 2 ),
     interval: 2,
-    // until: new Date( 2015, RRule.MAR, 25 ),
-    count: 15,
+    until: new Date( 2016, RRule.FEB, 2 ),
+    // count: 15,
     // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
     // byweekday: [ RRule.MO, RRule.TU, RRule.TH ],
     // bymonthday: [ 1, 2, 3 ],

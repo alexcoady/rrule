@@ -102,10 +102,12 @@ RRule.DEFAULT_LIST_OPTIONS = {
 };
 
 
-
-
-
-RRule.prototype.generateAddFunction = function ( options, dates ) {
+/**
+ *
+ *  @param {Object} options
+ *  @return {Object} options
+ */
+RRule.prototype.addFactory = function ( options, dates ) {
 
   var rrule = this;
 
@@ -115,23 +117,32 @@ RRule.prototype.generateAddFunction = function ( options, dates ) {
   var maxDate = options.maxDate;
   var minDate = options.minDate;
 
-  return function ( date ) {
+  options.add = function ( date ) {
 
     // Break if enough dates have been added
     if ( dates.length >= rrule.count ) return false;
 
     // Break if out of date bounds
-    if ( minDate && date.isBefore(minDate) ) return false;
+    if ( minDate && date.isBefore(minDate) ) return true;
     if ( maxDate && date.isAfter(maxDate) ) return false;
 
     // Test against iterator and predicate
     if ( !iterator( date, dates.length ) ) return false;
     if ( predicate( date, dates.length ) ) return dates.push( new Date(date.getTime()) );
+
+    return true;
   };
+
+  return options;
 };
 
 
-RRule.prototype.generateMinDate = function ( options ) {
+/**
+ *
+ *  @param {Object} options
+ *  @return {Object} options
+ */
+RRule.prototype.calcMinDate = function ( options ) {
 
   if ( options.after ) {
 
@@ -145,7 +156,13 @@ RRule.prototype.generateMinDate = function ( options ) {
   return options;
 };
 
-RRule.prototype.generateMaxDate = function ( options ) {
+
+/**
+ *
+ *  @param {Object} options
+ *  @return {Object} options
+ */
+RRule.prototype.calcMaxDate = function ( options ) {
 
   if ( options.before && this.until ) {
 
@@ -164,20 +181,42 @@ RRule.prototype.generateMaxDate = function ( options ) {
 };
 
 
+/**
+ *
+ *  @param {Object} options
+ *  @return {[Date]} Array of recurring dates
+ */
+RRule.prototype.calcStartDate = function ( options ) {
 
+  if ( !options.after ) {
+    options.after = new Date( this.dtstart.getTime() );
+  }
+
+  return options;
+}
+
+
+/**
+ *
+ *  @param {Object} options
+ *  @return {Object} options
+ */
 RRule.prototype.list = function ( options ) {
 
   var options = _.extend( RRule.DEFAULT_LIST_OPTIONS, options );
-  var pointer = new Date( this.dtstart.getTime() );
+  var pointer;
   var dates = [];
+  var count = 0;
 
-  this.generateMinDate( options );
-  this.generateMaxDate( options );
+  this.calcMinDate( options );
+  this.calcMaxDate( options );
+  this.calcStartDate( options );
+  this.addFactory( options, dates );
 
-  options.add = this.generateAddFunction( options, dates );
+  pointer = new Date( options.after );
 
   // MASTER LOOP
-  masterloop: while ( options.loopKill-- > 0 ) {
+  masterloop: while ( count++ < options.loopKill ) {
 
 
     // YEARLY LOOP
@@ -215,6 +254,8 @@ RRule.prototype.list = function ( options ) {
       pointer.setDate( pointer.getDate() + this.interval );
     }
   }
+
+  console.log("Looped %s times; generated %s dates", count, dates.length);
 
   return dates;
 
