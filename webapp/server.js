@@ -38,13 +38,13 @@ app.get("/", function ( req, res ) {
 
   var rrule = new RRule({
     freq: RRule.MONTHLY,
-    dtstart: new Date( 2014, RRule.NOV, 5 ),
+    dtstart: new Date( 2014, RRule.NOV, 8 ),
     interval: 1,
     // until: new Date( 2016, RRule.FEB, 2 ),
     count: 12,
     // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
     // byweekday: [ RRule.MO, RRule.TU, RRule.TH ],
-    bymonthday: [ 5 ],
+    bymonthday: [ 8 ],
   });
 
   res.render("list", {

@@ -19,10 +19,12 @@ function IteratorMonthly () {}
 
    for ( i; i < monthdaysCount; i += 1 ) {
 
+     // Reset to pointer
      monthPointer = new Date( pointer );
+
+     // Set correct date
      monthPointer.setDate( rrule.bymonthday[i] );
 
-     console.log( "Month pointer:", monthPointer );
      if ( !options.add( monthPointer ) ) return false;
    }
 
