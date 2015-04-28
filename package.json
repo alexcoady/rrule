@@ -5,7 +5,7 @@
     "url": "https://github.com/alexcoady/rrule.git"
   },
   "author": "Alex Coady <alexandercoady@me.com>",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": {
     "express": "~4.1.1",
     "mongoose": "~3.8.24",
