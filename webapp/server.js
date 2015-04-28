@@ -38,10 +38,10 @@ app.get("/", function ( req, res ) {
     dtstart: new Date( 2015, RRule.MAY, 1 ),
     interval: 1,
     // until: new Date( 2015, RRule.AUG, 8 ),
-    count: 7,
+    count: 100,
     // bysetpos: [ -1 ],
     byweekday: [
-      RRule.FR.nth(1),
+      // RRule.FR.nth(1),
       RRule.FR.nth(-1)
     ]
     // bymonthday: [ 8, 10 ],
