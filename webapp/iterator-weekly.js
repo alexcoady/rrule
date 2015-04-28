@@ -11,7 +11,7 @@ function IteratorWeekly () {}
  *  @param {Date} pointer The provided date to work from
  *  @return {Bool} true if master loop should continue
  */
- IteratorWeekly.loop = function ( rrule, options, pointer ) {
+ IteratorWeekly.list = function ( rrule, options, pointer ) {
 
   var i = 0;
   var byweekdayCount = rrule.byweekday.length;
@@ -20,7 +20,7 @@ function IteratorWeekly () {}
   // Breaks
   if ( !rrule.byweekday.length ) return false;
 
-  // Update pointer to START OF WEEK
+  // Update pointer to start of week
   pointer.setDate( pointer.getDate() - pointer.getDay() );
 
   // Loop through days of week and see if appropriate

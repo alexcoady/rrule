@@ -6,6 +6,7 @@ block body
   
   list = rrule.list()
   if list.length
+    h4 #{list.length} date#{ list.length === 1 ? "" : "s" }
     ul.list-group
       cache = false
       diff = 0

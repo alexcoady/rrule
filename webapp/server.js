@@ -1,4 +1,3 @@
-
 // Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
@@ -31,20 +30,22 @@ _.extend( app.locals, {
     DateFormat: DateFormat
 });
 
-// Initialise routes and pass the "app" to add requests
-// routes(app);
 
 app.get("/", function ( req, res ) {
 
   var rrule = new RRule({
     freq: RRule.MONTHLY,
-    dtstart: new Date( 2014, RRule.NOV, 8 ),
+    dtstart: new Date( 2015, RRule.MAY, 1 ),
     interval: 1,
-    // until: new Date( 2016, RRule.FEB, 2 ),
-    count: 12,
-    // bysetpos: [ 1, 2, 3, 4, 5, -1 ],
-    // byweekday: [ RRule.MO, RRule.TU, RRule.TH ],
-    bymonthday: [ 8 ],
+    // until: new Date( 2015, RRule.AUG, 8 ),
+    count: 7,
+    // bysetpos: [ -1 ],
+    byweekday: [
+      RRule.FR.nth(1),
+      RRule.FR.nth(-1)
+    ]
+    // bymonthday: [ 8, 10 ],
+    // byyearday: [1,100,200,300]
   });
 
   res.render("list", {

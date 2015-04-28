@@ -1,5 +1,6 @@
 var _ = require("underscore");
 var Weekday = require("./weekday");
+var IteratorYearly = require("./iterator-yearly");
 var IteratorMonthly = require("./iterator-monthly");
 var IteratorWeekly = require("./iterator-weekly");
 var IteratorDaily = require("./iterator-daily");
@@ -20,6 +21,7 @@ function RRule ( options ) {
   if ( options.bysetpos ) options.bysetpos = [].concat( options.bysetpos );
   if ( options.bymonthday ) options.bymonthday = [].concat( options.bymonthday );
   if ( options.byweekday ) options.byweekday = [].concat( options.byweekday );
+  if ( options.byyearday ) options.byyearday = [].concat( options.byyearday );
 
   _.extend( this, RRule.DEFAULT_OPTIONS, options );
 }
@@ -77,7 +79,8 @@ RRule.DEFAULT_OPTIONS = {
   until: undefined,
   bysetpos: [],
   bymonthday: [],
-  byweekday: []
+  byweekday: [],
+  byyearday: []
 };
 
 
@@ -219,34 +222,33 @@ RRule.prototype.list = function ( options ) {
   // MASTER LOOP
   masterloop: while ( count++ < options.loopKill ) {
 
-
     // YEARLY LOOP
     if ( this.freq === RRule.YEARLY ) {
 
-
+      if ( !IteratorYearly.list(this, options, new Date(pointer)) ) break masterloop;
     }
 
     // MONTHLY LOOP
     else if ( this.freq === RRule.MONTHLY ) {
 
-      if ( !IteratorMonthly.loop(this, options, new Date(pointer)) ) break masterloop;
+      if ( !IteratorMonthly.list(this, options, new Date(pointer)) ) break masterloop;
     }
 
     // WEEKLY LOOP
     else if ( this.freq === RRule.WEEKLY ) {
 
-      if ( !IteratorWeekly.loop(this, options, new Date(pointer)) ) break masterloop;
+      if ( !IteratorWeekly.list(this, options, new Date(pointer)) ) break masterloop;
     }
 
     // DAILY LOOP
     else if ( this.freq === RRule.DAILY ) {
 
-      if ( !IteratorDaily.loop(this, options, new Date(pointer)) ) break masterloop;
+      if ( !IteratorDaily.list(this, options, new Date(pointer)) ) break masterloop;
     }
 
     // Update iterator
     if ( this.freq === RRule.YEARLY ) {
-      pointer.setYear( pointer.getYear() + this.interval );
+      pointer.setFullYear( pointer.getFullYear() + this.interval );
     } else if ( this.freq === RRule.MONTHLY ) {
       pointer.setMonth( pointer.getMonth() + this.interval );
     } else if ( this.freq === RRule.WEEKLY ) {
@@ -300,6 +302,10 @@ RRule.prototype.toString = function () {
     rules.push( "BYWEEKDAY=" + _.map( this.byweekday, function ( weekday ) {
       return weekday.toString();
     }).join(",") );
+  }
+
+  if ( this.byyearday.length ) {
+    rules.push( "BYYEARDAY=" + this.byyearday.join(",") );
   }
 
   return "RRULE:" + rules.join(";");

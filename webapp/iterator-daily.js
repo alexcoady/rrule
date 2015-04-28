@@ -8,7 +8,7 @@ function IteratorDaily () {}
  *  @param {Date} pointer The provided date to work from
  *  @return {Bool} true if master loop should continue
  */
- IteratorDaily.loop = function ( rrule, options, pointer ) {
+ IteratorDaily.list = function ( rrule, options, pointer ) {
 
   if ( options.add(pointer) ) return true;
 
