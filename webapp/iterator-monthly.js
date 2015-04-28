@@ -122,6 +122,7 @@ IteratorMonthly.byweekdayList = function ( rrule, options, pointer ) {
 
       // Check date is still within the correct month
       if ( dayPointer.getMonth() !== pointer.getMonth() ) continue;
+      if ( !options.add( dayPointer ) ) return false;
 
     } else if ( weekday.n === -1 ) {
 
@@ -134,9 +135,9 @@ IteratorMonthly.byweekdayList = function ( rrule, options, pointer ) {
       diff = diff <= -7 ? diff + 7 : diff;
 
       dayPointer.setDate( dayPointer.getDate() + diff );
-    }
 
-    if ( !options.add( dayPointer ) ) return false;
+      if ( !options.add( dayPointer ) ) return false;
+    }
   }
 
   // Kill loop

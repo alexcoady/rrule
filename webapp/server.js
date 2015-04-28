@@ -39,10 +39,14 @@ app.get("/", function ( req, res ) {
     interval: 1,
     // until: new Date( 2015, RRule.AUG, 8 ),
     count: 100,
-    // bysetpos: [ -1 ],
+    bysetpos: [ -1 ],
     byweekday: [
       // RRule.FR.nth(1),
-      RRule.FR.nth(-1)
+      RRule.MO,
+      RRule.TU,
+      RRule.WE,
+      RRule.TH,
+      RRule.FR
     ]
     // bymonthday: [ 8, 10 ],
     // byyearday: [1,100,200,300]

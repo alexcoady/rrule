@@ -1,5 +1,9 @@
 {
-  "name": "rrule-utils",
+  "name": "split-rrule",
+  "respository": {
+    "type": "git",
+    "url": "https://github.com/alexcoady/rrule.git"
+  },
   "author": "Alex Coady <alexandercoady@me.com>",
   "version": "0.0.1",
   "dependencies": {
