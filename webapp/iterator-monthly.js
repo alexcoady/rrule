@@ -130,8 +130,10 @@ IteratorMonthly.byweekdayList = function ( rrule, options, pointer ) {
       pointerDay = dayPointer.getDay();
 
       // Go to correct day in month
-      diff = weekdayJSDay - (weekdayJSDay === 0 ? 0 : 7);
-      dayPointer.setDate( dayPointer.getDate() + diff - pointerDay );
+      diff = weekdayJSDay - (weekdayJSDay === 0 ? 0 : 7) - pointerDay;
+      diff = diff === -7 ? 0 : diff;
+
+      dayPointer.setDate( dayPointer.getDate() + diff );
     }
 
     if ( !options.add( dayPointer ) ) return false;

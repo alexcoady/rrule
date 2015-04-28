@@ -65,7 +65,8 @@ RRule.OPTION_NAMES = [
   "until",
   "bysetpos",
   "bymonthday",
-  "byweekday"
+  "byweekday",
+  "byyearday"
 ];
 
 
@@ -97,6 +98,7 @@ RRule.DEFAULT_LIST_OPTIONS = {
   before: undefined,
   include: true,
   loopKill: 500,
+  sort: false,
   iterator: function ( date, i ) {
     return i < 1000;
   },
@@ -260,11 +262,11 @@ RRule.prototype.list = function ( options ) {
 
   console.log("Looped %s times; generated %s dates", count, dates.length);
 
-  return dates;
+  if ( !options.sort ) return dates;
 
-  // return dates.sort(function (a, b) {
-  //   return a.getTime() - b.getTime();
-  // });
+  return dates.sort(function (a, b) {
+    return a.getTime() - b.getTime();
+  });
 }
 
 
