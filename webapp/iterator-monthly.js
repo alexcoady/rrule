@@ -19,7 +19,7 @@ function IteratorMonthly () {}
 
      return IteratorMonthly.bysetposList( rrule, options, pointer );
 
-   } else {
+   } else if ( rrule.byweekday.length ) {
 
      return IteratorMonthly.byweekdayList( rrule, options, pointer );
    }
@@ -70,6 +70,9 @@ IteratorMonthly.bymonthdayList = function ( rrule, options, pointer ) {
 IteratorMonthly.bysetposList = function ( rrule, options, pointer ) {
 
   console.log("> IteratorMonthly: bysetposList");
+
+  // Generate dates for each day specified then return the nth occurance
+
 
   // Kill loop
   return false;
